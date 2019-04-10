@@ -1,0 +1,114 @@
+
+//Creates an offset curve of a single curvature surface
+//    x = the curve to offset from the original surface
+//    y = offset amount number
+
+
+private void RunScript(Curve x, double y, ref object A)
+  {
+
+    Vector3d vDir = new Vector3d(0, 0, 1);
+    double[] tParam = x.ExtremeParameters(vDir);
+    Curve[] curvas = x.DuplicateSegments();
+
+    List<Point3d> puntos = new List<Point3d>();
+
+    for (int i = 0; i < curvas.Length ; i++)
+    {
+      Point3d pt1 = curvas[i].PointAtLength(0);
+      Point3d pt2 = curvas[i].PointAtLength(y);
+
+      puntos.Add(pt1);
+      puntos.Add(pt2);
+
+      Vector3d myVector = Point3d.Subtract(pt2, pt1);
+
+      if(i == 0)
+      {
+        curvas[curvas.Length - 1].Translate(myVector);
+      }
+      else
+      {
+        curvas[i - 1].Translate(myVector);
+      }
+    }
+
+    //Recortar la curva
+    List<Curve> recortadas = new List<Curve>();
+
+
+    for(int i = 0; i < curvas.Length ; i++)
+    {
+      //Interseccion
+
+      int b = i + 1;
+
+      if(i == curvas.Length - 1)
+      {
+        b = 0;
+      }
+      else
+      {
+        b = i + 1;
+      }
+
+      Rhino.Geometry.Intersect.CurveIntersections intIsma =
+        Rhino.Geometry.Intersect.Intersection.CurveCurve(curvas[i], curvas[b], 0, 0);
+
+      Rhino.Geometry.Intersect.IntersectionEvent intIsma2 = intIsma[0];
+
+      double parameterX = intIsma2.ParameterA;
+
+      Curve miniCurva = curvas[i].Split(parameterX)[0];
+
+      recortadas.Add(miniCurva);
+
+
+    }
+
+    //Recortar la curva2
+    List<Curve> recortadas2 = new List<Curve>();
+
+    Curve[] recortadasArray = recortadas.ToArray();
+
+
+    for(int i = 0; i < curvas.Length ; i++)
+    {
+      //Interseccion
+
+      int b = i - 1;
+
+      if(i == 0)
+      {
+        b = curvas.Length - 1;
+      }
+      else
+      {
+        b = i - 1;
+      }
+
+      Rhino.Geometry.Intersect.CurveIntersections intIsma =
+        Rhino.Geometry.Intersect.Intersection.CurveCurve(recortadasArray[i], recortadasArray[b], 0, 0);
+
+      Rhino.Geometry.Intersect.IntersectionEvent intIsma2 = intIsma[0];
+
+      double parameterX = intIsma2.ParameterA;
+
+      Curve miniCurva = recortadasArray[i].Split(parameterX)[1];
+
+      recortadas2.Add(miniCurva);
+    }
+
+    //Array to list
+
+    List<Curve> curvitas = new List<Curve>(recortadas2);
+
+
+
+    Curve[] curvaFinal = Curve.JoinCurves(curvitas);
+
+
+    A = curvaFinal;
+
+
+  }
