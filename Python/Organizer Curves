@@ -1,8 +1,10 @@
 
-##Organizes inside the same branch Curves with data in Common
+## Appends inside the same branch Curves with data in Common
 ## INPUTS
-##    crvs 
-##    data_in_common = the data the curves share 
+    ##    crvs (List Access) 
+    ##    data_in_common = the data the curves share (List Access) 
+## OUTPUT
+    ##    crvs
 
 
 import rhinoscriptsyntax as rs
