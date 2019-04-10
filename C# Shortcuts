@@ -1,0 +1,10 @@
+Curve.JoinCurves Method (IEnumerable<Curve>)
+el IEnumerable<Curve> es una lista o array con curvas dentro
+
+
+Curve.DuplicateSegments Method
+metes una curva y te da el array con los segments. Es como shatter en GH
+
+
+Vector3d myVector =  Point3d.Subtract(ptB, ptA);
+Genera un vector del ptA al ptB
