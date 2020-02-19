@@ -1,0 +1,107 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+using Rhino;
+using Rhino.Geometry;
+
+using Grasshopper;
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Types;
+
+
+
+/// <summary>
+/// This class will be instantiated on demand by the Script component.
+/// </summary>
+public class Script_Instance : GH_ScriptInstance
+{
+#region Utility functions
+  /// <summary>Print a String to the [Out] Parameter of the Script component.</summary>
+  /// <param name="text">String to print.</param>
+  private void Print(string text) { /* Implementation hidden. */ }
+  /// <summary>Print a formatted String to the [Out] Parameter of the Script component.</summary>
+  /// <param name="format">String format.</param>
+  /// <param name="args">Formatting parameters.</param>
+  private void Print(string format, params object[] args) { /* Implementation hidden. */ }
+  /// <summary>Print useful information about an object instance to the [Out] Parameter of the Script component. </summary>
+  /// <param name="obj">Object instance to parse.</param>
+  private void Reflect(object obj) { /* Implementation hidden. */ }
+  /// <summary>Print the signatures of all the overloads of a specific method to the [Out] Parameter of the Script component. </summary>
+  /// <param name="obj">Object instance to parse.</param>
+  private void Reflect(object obj, string method_name) { /* Implementation hidden. */ }
+#endregion
+
+#region Members
+  /// <summary>Gets the current Rhino document.</summary>
+  private readonly RhinoDoc RhinoDocument;
+  /// <summary>Gets the Grasshopper document that owns this script.</summary>
+  private readonly GH_Document GrasshopperDocument;
+  /// <summary>Gets the Grasshopper script component that owns this script.</summary>
+  private readonly IGH_Component Component;
+  /// <summary>
+  /// Gets the current iteration count. The first call to RunScript() is associated with Iteration==0.
+  /// Any subsequent call within the same solution will increment the Iteration count.
+  /// </summary>
+  private readonly int Iteration;
+#endregion
+
+  /// <summary>
+  /// This procedure contains the user code. Input parameters are provided as regular arguments,
+  /// Output parameters as ref arguments. You don't have to assign output parameters,
+  /// they will have a default value.
+  /// </summary>
+  private void RunScript(bool Run, object comp_name, ref object enabled_comp, ref object is_enable)
+  {
+
+    //var object_list = new List<IGH_DocumentObject>();
+    var enabled_obj_names = new List<string>();
+    var names_list = new List<string>();
+    var is_enable_list = new List<bool>();
+    var enabled_objects = new List<IGH_DocumentObject>();
+
+    if(Run){
+
+      // Gets the names of all the objects enabled in the document
+      enabled_objects = GrasshopperDocument.EnabledObjects();
+      foreach(IGH_DocumentObject obj in enabled_objects)
+      {
+        enabled_obj_names.Add(obj.Name);
+      }
+
+      // Loops through all the elements in the canvas
+      foreach(IGH_DocumentObject obj in GrasshopperDocument.Objects)
+      {
+
+        bool object_in_list = new bool();
+        // If the o
+        object_in_list = enabled_obj_names.Contains(obj.Name);
+
+        if(obj.NickName == "Timer" && object_in_list)
+        {
+
+          is_enable_list.Add(true);
+          // Disables the component
+          var object_list = new List<IGH_DocumentObject>();
+          object_list.Add(obj);
+          GrasshopperDocument.ToggleEnabledFlags(object_list);
+        }
+
+
+      }
+
+
+
+      enabled_comp = enabled_obj_names;
+      is_enable = is_enable_list;
+
+
+    }
+
+  }
+
+  // <Custom additional code> 
+
+  // </Custom additional code> 
+}
