@@ -1,0 +1,11 @@
+  private void RunScript(object x, object y, ref object A)
+  {
+
+
+    this.Component.AddRuntimeMessage(GH_RuntimeMessageLevel.Error,
+      "Warning at the top right of the component");
+      
+    this.Component.Message = "Message at the bottom of the component";
+    
+    
+  }
