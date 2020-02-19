@@ -1,0 +1,22 @@
+  private void RunScript(Guid x, bool run, ref object A)
+  {
+
+    if(run){
+      // Get the Rhino Object by its GUID
+      // The input x has to be GUID
+      var obj = Rhino.RhinoDoc.ActiveDoc.Objects.Find(x);
+
+      //Set the key and value
+      string key = "llave";
+      string val = "valor";
+
+      //Add the key and value to the object
+      obj.Attributes.SetUserString(key, val);
+    }
+
+  }
+
+  // <Custom additional code> 
+
+  // </Custom additional code> 
+}
