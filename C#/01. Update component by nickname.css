@@ -1,0 +1,12 @@
+  private void RunScript(bool run, string Name, ref object A)
+  {
+
+
+    if(run){
+      foreach(IGH_DocumentObject obj in GrasshopperDocument.Objects)
+        if(obj.NickName == Name)
+          obj.ExpireSolution(true);
+    }
+
+
+  }
