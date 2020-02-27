@@ -1,7 +1,7 @@
   private void RunScript(bool Run, object comp_name, ref object enabled_comp, ref object is_enable)
   {
 
-    //var object_list = new List<IGH_DocumentObject>();
+    var object_list = new List<IGH_DocumentObject>();
     var enabled_obj_names = new List<string>();
     var names_list = new List<string>();
     var is_enable_list = new List<bool>();
@@ -29,7 +29,6 @@
 
           is_enable_list.Add(true);
           // Disables the component
-          var object_list = new List<IGH_DocumentObject>();
           object_list.Add(obj);
           GrasshopperDocument.ToggleEnabledFlags(object_list);
         }
