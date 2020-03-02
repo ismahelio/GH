@@ -4,6 +4,10 @@
 __author__ = "ismael.sanz"
 __version__ = "2020.03.02"
 
+""" This script combines bezier curves in different segments with different x - y amplitud to make a similar
+    function to a perlin curve """
+
+
 from random import uniform
 
 #defines 50% of the bezier curve
@@ -18,7 +22,7 @@ def bezier(x, u0, u1, u2, u3):
     return y
 
 
-
+# Defines the other 50% of the curve and remap the values between 0 and 1
 def bezier_values(n_div):
     y = []
     y_reverse = []
@@ -49,6 +53,8 @@ def bezier_values(n_div):
     
     return y_remap
 
+
+# bezier values
 y = bezier_values(n_div)
 
 y_value = 0
