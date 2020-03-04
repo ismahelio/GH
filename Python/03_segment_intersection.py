@@ -1,44 +1,89 @@
-"""Calculates if two line segments intersect or not.
-    Doesnt give the point just True or False.
-    Inputs:
-        pt1: (x1, y1)
-        pt2: (x2, y2)
-        pt3: (x3, y3)
-        pt4: (x4, y4)
-    Output:
-        a: Boolean"""
+""" 3 functions:
+    - line_intersection = defines the intersection pt of the vectors
+    - in_curves = check that the point is inside one of the lines x-y domain
+    - do_lines_intersect() = checks that the pt is inside the domain of both curves
+    """
+
+
 
 __author__ = "ismael.sanz"
 __version__ = "2020.03.04"
 
-# Point line x start
-x1 = x_start.X
-y1 = x_start.Y
-
-# Point line x end
-x2 = x_end.X
-y2 = x_end.Y
-
-# Point line y start
-x3 = y_start.X
-y3 = y_start.Y
-
-# Point line y end
-x4 = y_end.X
-y4 = y_end.Y
 
 
-calc_1 = x1 * (x3 * (y2 - y4) + x4 * (y3 - y2))
-calc_2 = x2 * (x3 * (y4 - y1) + x4 * (y1 - y3))
-calc_3 = (x1 - x2) * (y3 - y4)
-calc_4 = (x4 - x3) * (y1 - y2)
+def line_intersection(line1, line2):
+    xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
+    ydiff = (line1[0][1] - line1[1][1], line2[0][1] - line2[1][1])
 
-x = (calc_1 + calc_2) / (calc_3 + calc_4)
+    def det(a, b):
+        return a[0] * b[1] - a[1] * b[0]
+
+    div = det(xdiff, ydiff)
+    if div == 0:
+       raise Exception('lines do not intersect')
+
+    d = (det(*line1), det(*line2))
+    x = det(d, xdiff) / div
+    y = det(d, ydiff) / div
+    
+    return (x,y)
 
 
-# If True the segments intersect
+# Check that the point is inside the x and y boundaries
+def in_curve((pt1, pt2, ptx)):
+    x_values = [pt1[0], pt2[0]]
+    x_values.sort()
+    
+    x_min = x_values[0]
+    x_max = x_values[1]
+    
+    y_values = [pt1[1], pt2[1]]
+    y_values.sort()
+    
+    y_min = y_values[0]
+    y_max = y_values[1]
+    
+    x_in = x_min <= ptx[0] <= x_max
+    y_in = y_min <= ptx[1] <= y_max
+    
+    if x_in and y_in:
+        return True
+    else:
+        return False
 
-if x1 <= x <= x2 and x3 <= x <= x4:
-    a = True
-else:
-    a = False
+
+# pts as pt1 = (x, y)
+def do_lines_intersect(pt1, pt2, pt3, pt4):
+    
+    pt_x = line_intersection((pt1, pt2), (pt3, pt4))
+    
+    in_line1 = in_curve((pt1, pt2, pt_x))
+    if in_line1:
+        in_line2 = in_curve((pt3, pt4, pt_x))
+        if in_line2:
+            inside = True
+        else:
+            inside = False
+    else:
+        inside = False
+    
+    return [inside, pt_x]
+
+
+pt1 = (x.X, x.Y)
+pt2 = (y.X, y.Y)
+pt3 = (z.X, z.Y)
+pt4 = (u.X, u.Y)
+
+# pt1 and pt2 from line 1
+# pt3 and pt4 from line 2
+
+# returns True or False for intersection and pt_x (pt of intersection)
+inside = do_lines_intersect(pt1, pt2, pt3, pt4)
+
+intersects = inside[0]
+pt = inside[1]
+
+
+
+
