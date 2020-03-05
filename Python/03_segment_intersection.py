@@ -43,8 +43,19 @@ def in_curve((pt1, pt2, ptx)):
     y_min = y_values[0]
     y_max = y_values[1]
     
-    x_in = x_min <= ptx[0] <= x_max
-    y_in = y_min <= ptx[1] <= y_max
+    # Round the values in case the points are aligned but there's some minor problem with decimals
+    x_min = round(x_min, 3)
+    ptx_x = round(ptx[0], 3)
+    x_max = round(x_max, 3)
+    y_min = round(y_min, 3)
+    ptx_y = round(ptx[1], 3)
+    y_max = round(y_max, 3)
+    
+    x_in = x_min <= ptx_x <= x_max
+    y_in = y_min <= ptx_y <= y_max
+    
+    print [x_min, ptx_x, x_max, x_in]
+    print [y_min, ptx_y, y_max, y_in]
     
     if x_in and y_in:
         return True
