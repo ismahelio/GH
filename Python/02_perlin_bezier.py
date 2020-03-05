@@ -4,10 +4,6 @@
 __author__ = "ismael.sanz"
 __version__ = "2020.03.02"
 
-""" This script combines bezier curves in different segments with different x - y amplitud to make a similar
-    function to a perlin curve """
-
-
 from random import uniform
 
 #defines 50% of the bezier curve
@@ -22,7 +18,7 @@ def bezier(x, u0, u1, u2, u3):
     return y
 
 
-# Defines the other 50% of the curve and remap the values between 0 and 1
+
 def bezier_values(n_div):
     y = []
     y_reverse = []
@@ -40,7 +36,6 @@ def bezier_values(n_div):
     for i in range(n_div):
         y.append(height - y_reverse[i])
     
-    # remap the y values between 0 and 1
     y_remap = []
     for value in y:
         OldMin = 0
@@ -54,8 +49,6 @@ def bezier_values(n_div):
     return y_remap
 
 
-# bezier values
-y = bezier_values(n_div)
 
 y_value = 0
 
@@ -64,21 +57,50 @@ ys = []
 # x values of the function
 xs = []
 
-for i in range(n_segments):
-    # x_int and y_int gives intensity to x and y by segment
-    x_int = uniform(0.1,2)
+
+
+# It creates the number of points as input: max_pts
+
+# Change n_div for the number of division per curve
+# Change y_int as the intensity of y values 
+
+adding_points = True
+
+j = 0
+
+while adding_points:
+    
+    n_div = uniform(7,20)
+    
+    n_div = int(n_div)
+    y = bezier_values(n_div)
+    
+    
+    x_int = 1
     y_int = uniform(10,50)
     
-    #if its a multiple of 2 the function goes up and if not it goes down
-    if i%2 == 0:
+    if j%2 == 0:
         for i in range(len(y)):
             y_ = y_value + (y[i] * y_int)
             ys.append(y_)
             xs.append(x_int)
+            
+            if len(ys)==max_pts:
+                adding_points = False
+                break
+            
+            
         y_value = y_
     else:
         for i in range(len(y)):
             y_ = y_value - (y[i] * y_int)
             ys.append(y_)
             xs.append(x_int)
+            if len(ys)==max_pts:
+                adding_points = False
+                break
         y_value = y_
+    
+    j+=1
+
+
